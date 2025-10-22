@@ -286,6 +286,44 @@
       margin-top: 5px;
     }
     
+    .therapy-link {
+      color: #059669;
+      text-decoration: underline;
+      cursor: help;
+      position: relative;
+      font-weight: bold;
+    }
+    
+    .therapy-link:hover {
+      color: #047857;
+    }
+    
+    /* ツールチップ */
+    .tooltip {
+      position: fixed;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.9em;
+      max-width: 300px;
+      z-index: 10000;
+      pointer-events: none;
+      line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    
+    .tooltip:before {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 20px;
+      width: 12px;
+      height: 12px;
+      background: rgba(0, 0, 0, 0.9);
+      transform: rotate(45deg);
+    }
+    
     .close-btn {
       position: absolute;
       top: 15px;
@@ -378,6 +416,50 @@
   </div>
   
   <script>
+    // 療法の解説データ
+    const therapyInfo = {
+      '行動療法': '問題行動を減らし、適応的な行動を増やすことを目指す心理療法。具体的な行動の変化に焦点を当てます。',
+      '認知行動療法': '考え方（認知）と行動の両方を変えることで、気持ちや問題を改善する心理療法。科学的根拠が豊富です。',
+      'SST': 'ソーシャルスキルトレーニング。対人関係や社会生活に必要なスキルを練習を通して身につける訓練法です。',
+      'リラクセーション法': '心身の緊張を和らげるための技法。呼吸法、筋弛緩法、瞑想などが含まれます。',
+      '暴露療法': '恐怖や不安を引き起こす状況に段階的に直面することで、不安を軽減する治療法です。',
+      'スキーマ療法': '幼少期から形成された思考パターン（スキーマ）を特定し、修正する心理療法です。',
+      '行動活性化療法': 'うつ病治療の一つ。活動量を増やし、楽しみや達成感を取り戻すことを目指します。',
+      'アサーション': '自分の気持ちや意見を、相手を尊重しながら適切に表現するコミュニケーション技法です。',
+      'ACT': 'アクセプタンス＆コミットメント・セラピー。思考や感情を受け入れ、価値に基づいた行動をとることを目指します。',
+      'アンガーマネジメント': '怒りの感情を適切にコントロールし、建設的に対処する方法を学ぶプログラムです。',
+      'DBT': '弁証法的行動療法。感情調節、対人関係、ストレス耐性などのスキルを総合的に訓練します。',
+      '環境調整法': '物理的・社会的環境を整えることで、ストレスを軽減し、適応を促進する方法です。',
+      '作業療法': '日常生活活動を通して、心身の機能回復や生活の質の向上を図るリハビリテーションです。',
+      'ソーシャルストーリー': '社会的状況を視覚的・具体的に説明する手法。特にASDの方に有効です。',
+      '問題解決療法': '問題を構造的に分析し、具体的な解決策を見つけて実行する技法です。',
+      '認知リハビリテーション': '記憶、注意、実行機能などの認知機能を改善するための訓練プログラムです。',
+      'メタ認知療法': '自分の思考プロセスを客観的に観察し、コントロールする能力を高める療法です。',
+      '職業リハビリテーション': '就労に向けた準備や、職場での適応を支援する総合的なプログラムです。',
+      'セルフケア': '自分自身の心身の健康を維持・向上させるための主体的な取り組みです。',
+      'セルフモニタリング': '自分の行動、思考、感情を記録・観察することで、パターンや問題に気づく技法です。',
+      '医学的評価': '医師による診察・検査を通じて、症状の原因を特定し、適切な治療方針を決定します。',
+      '暴露反応妨害法': '強迫性障害の治療法。不安場面に直面しながら、強迫行為を我慢する練習をします。',
+      '現実検討': '自分の考えや認識が現実と合っているか確認する技法です。',
+      'MBCT': 'マインドフルネス認知療法。瞑想と認知療法を組み合わせた、再発予防に効果的な治療法です。',
+      'マインドフルネス': '今この瞬間に、評価せずに注意を向ける練習。ストレス軽減に効果があります。',
+      '薬物療法': '薬を用いて症状を軽減する治療法。医師の処方と管理のもとで行います。',
+      '心理療法': '対話を通じて心理的問題の解決を図る治療の総称です。',
+      '睡眠衛生': '良質な睡眠を得るための生活習慣や環境づくりの方法です。',
+      '認知行動療法(不眠)': '不眠症に特化した認知行動療法。睡眠に関する誤った考えを修正します。',
+      'CBT-I': '不眠症の認知行動療法の英語略称。科学的に効果が実証されています。',
+      '社会リハビリテーション': '社会参加や対人関係を通じて、生活の質を向上させる支援プログラムです。',
+      '医学的治療': '医師による診断・治療。薬物療法や専門的医療処置を含みます。',
+      '依存症治療': '依存症に特化した専門的治療プログラム。心理療法と医学的アプローチを組み合わせます。',
+      'EMDR': '眼球運動による脱感作と再処理法。トラウマ記憶の処理に効果的な治療法です。',
+      '医学的治療': '医学的な診断と治療。症状に応じた適切な医療介入を行います。',
+      '準備技法': '本番に向けて事前に準備する方法。不安を軽減し、パフォーマンスを向上させます。',
+      '認知再構成': '否定的・非合理的な考え方を、より現実的でバランスの取れた考え方に変える技法です。',
+      '意思決定支援': '重要な決定をする際に、選択肢を整理し、最適な判断を導く支援方法です。',
+      '就労支援': '就職活動や職場定着を総合的にサポートするプログラムです。',
+      '医療・福祉サービス': '医療機関や福祉制度による専門的な支援サービスです。'
+    };
+    
     const cardsData = [
       // 職場・作業中 (1-20)
       {
@@ -1087,12 +1169,52 @@
           <div class="method-header">${difficultyLabels[index]}</div>
           <div class="method-title">${method.title}</div>
           <div class="method-tips">ポイント：${method.tips}</div>
-          <div class="method-evidence">根拠：${method.evidence}</div>
+          <div class="method-evidence">根拠：<span class="therapy-link" data-therapy="${method.evidence}">${method.evidence}</span></div>
         </div>
       `).join('');
       
+      // 療法リンクにイベントリスナーを追加
+      const therapyLinks = modalBody.querySelectorAll('.therapy-link');
+      therapyLinks.forEach(link => {
+        link.addEventListener('mouseenter', showTooltip);
+        link.addEventListener('mouseleave', hideTooltip);
+        link.addEventListener('mousemove', moveTooltip);
+      });
+      
       modal.classList.add('active');
       document.body.style.overflow = 'hidden';
+    }
+    
+    // ツールチップ表示
+    let tooltip = null;
+    
+    function showTooltip(e) {
+      const therapy = e.target.dataset.therapy;
+      const description = therapyInfo[therapy] || 'この療法の詳細情報は準備中です。';
+      
+      tooltip = document.createElement('div');
+      tooltip.className = 'tooltip';
+      tooltip.textContent = description;
+      document.body.appendChild(tooltip);
+      
+      moveTooltip(e);
+    }
+    
+    function moveTooltip(e) {
+      if (!tooltip) return;
+      
+      const x = e.clientX;
+      const y = e.clientY;
+      
+      tooltip.style.left = x + 'px';
+      tooltip.style.top = (y - tooltip.offsetHeight - 15) + 'px';
+    }
+    
+    function hideTooltip() {
+      if (tooltip) {
+        tooltip.remove();
+        tooltip = null;
+      }
     }
     
     // モーダルを閉じる
@@ -1100,6 +1222,7 @@
       const modal = document.getElementById('modal');
       modal.classList.remove('active');
       document.body.style.overflow = 'auto';
+      hideTooltip(); // ツールチップも削除
     }
     
     // モーダル外クリックで閉じる
