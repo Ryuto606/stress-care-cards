@@ -39,6 +39,56 @@
       opacity: 0.9;
     }
     
+    /* 注意事項 */
+    .notice {
+      background: rgba(255, 255, 255, 0.95);
+      border-left: 4px solid #f59e0b;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .notice-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      font-size: 0.95em;
+      color: #78350f;
+      margin-bottom: 10px;
+    }
+    
+    .notice-icon {
+      font-size: 1.2em;
+    }
+    
+    .notice-content {
+      font-size: 0.85em;
+      line-height: 1.6;
+      color: #666;
+    }
+    
+    .notice-content ul {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+    }
+    
+    .notice-content li {
+      padding: 4px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+    
+    .notice-content li:before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #f59e0b;
+      font-weight: bold;
+    }
+    
     /* フィルター */
     .filters {
       background: white;
@@ -363,6 +413,19 @@
         font-size: 1.8em;
       }
       
+      .notice {
+        padding: 12px 15px;
+        font-size: 0.9em;
+      }
+      
+      .notice-header {
+        font-size: 0.9em;
+      }
+      
+      .notice-content {
+        font-size: 0.8em;
+      }
+      
       .cards-grid {
         grid-template-columns: 1fr;
       }
@@ -383,6 +446,22 @@
       <h1>🌿 ストレスケアカード</h1>
       <p class="subtitle">あなたのストレスに合った対処法を見つけましょう</p>
     </header>
+    
+    <div class="notice">
+      <div class="notice-header">
+        <span class="notice-icon">⚠️</span>
+        <span>このカードの使い方と注意事項</span>
+      </div>
+      <div class="notice-content">
+        <ul>
+          <li>これらの対処法は科学的根拠に基づいていますが、すべての人に効果があるとは限りません</li>
+          <li><span class="star">★★★</span>の対処法は専門家のサポートが必要です</li>
+          <li>症状が重い場合や改善しない場合は、必ず医療機関を受診してください</li>
+          <li>自己判断での薬の中止や変更は危険です。必ず医師に相談してください</li>
+          <li>緊急時（自傷や自殺念慮など）は、すぐに専門機関（#いのちSOS 0120-061-338など）に連絡してください</li>
+        </ul>
+      </div>
+    </div>
     
     <div class="filters">
       <div class="filter-group">
